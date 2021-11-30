@@ -2,7 +2,7 @@ import styles from "./Avatar.module.css";
 
 const Avatar = (props) => {
   return (
-    <div class={styles["avatar"]} style={props.style}>
+    <div class={`${styles["avatar"]} ${props.class}`} style={props.style}>
       <img
         src={props.image}
         alt={props.alt}
