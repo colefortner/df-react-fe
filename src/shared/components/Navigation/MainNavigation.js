@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 const MainNavigation = (props) => {
   return (
     <MainHeader>
-      <button class={styles["main-navigaton__menu-btn"]}>
+      <button class={styles["main-navigation__menu-btn"]}>
         <span />
         <span />
         <span />
