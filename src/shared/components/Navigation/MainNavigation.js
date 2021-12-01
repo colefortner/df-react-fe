@@ -1,6 +1,8 @@
-import styles from "./MainNavigation.module.css";
-import MainHeader from "./MainHeader";
 import { Link } from "react-router-dom";
+import MainHeader from "./MainHeader";
+import NavLinks from "./NavLinks";
+
+import styles from "./MainNavigation.module.css";
 
 const MainNavigation = (props) => {
   return (
@@ -13,7 +15,9 @@ const MainNavigation = (props) => {
       <h1 class={styles["main-navigation__title"]}>
         <Link to="/">YourBusinesses</Link>
       </h1>
-      <nav>...</nav>
+      <nav>
+        <NavLinks />
+      </nav>
     </MainHeader>
   );
 };
