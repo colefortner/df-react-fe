@@ -1,4 +1,5 @@
 import BusinessList from "../components/BusinessList";
+import { useParams } from "react-router";
 
 const businesses = [
   {
@@ -30,7 +31,9 @@ const businesses = [
 ];
 
 const UserBusinesses = () => {
-  return <BusinessList items={businesses} />;
+  const userId = useParams().userId;
+  const loadedBusinesses = businesses.filter((b) => b.creator === userId);
+  return <BusinessList items={loadedBusinesses} />;
 };
 
 export default UserBusinesses;
