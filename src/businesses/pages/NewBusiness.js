@@ -1,5 +1,6 @@
 import "./NewBusiness.css";
 import Input from "../../shared/components/FormElements/Input";
+import { VALIDATOR_REQUIRE } from "../../shared/util/validators";
 
 const NewBusiness = () => {
   return (
@@ -8,7 +9,7 @@ const NewBusiness = () => {
         element="input"
         type="text"
         label="Title"
-        validators={[]}
+        validators={[VALIDATOR_REQUIRE()]}
         errorText="Please enter a valid title"
       />
     </form>
