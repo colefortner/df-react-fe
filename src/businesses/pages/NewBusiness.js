@@ -55,8 +55,13 @@ const NewBusiness = () => {
     });
   }, []);
 
+  const businessSubmitHandler = (event) => {
+    event.preventDefault();
+    console.log(formState.inputs);
+  };
+
   return (
-    <form className="place-form">
+    <form className="place-form" onSubmit={businessSubmitHandler}>
       <Input
         id="title"
         element="input"
@@ -73,6 +78,14 @@ const NewBusiness = () => {
         rows="5"
         validators={[VALIDATOR_MINLENGTH(5)]}
         errorText="Please enter a valid description (at least 5 characters)"
+        onInput={inputHandler}
+      />
+      <Input
+        id="address"
+        element="input"
+        label="Address"
+        validators={[VALIDATOR_REQUIRE()]}
+        errorText="Please enter a valid address"
         onInput={inputHandler}
       />
       <Button type="submit" disabled={!formState.isValid}>
