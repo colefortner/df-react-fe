@@ -5,6 +5,7 @@ import NewBusiness from "./businesses/pages/NewBusiness";
 import MainNavigation from "./shared/components/Navigation/MainNavigation";
 import UserBusinesses from "./businesses/pages/UserBusinesses";
 import { BrowserRouter } from "react-router-dom";
+import UpdateBusiness from "./businesses/pages/UpdateBusiness";
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
           <Route path="/" element={<Users />} />
           <Route path="/:userId/businesses" element={<UserBusinesses />} />
           <Route path="/businesses/new" element={<NewBusiness />} />
+          <Route path="/businesses/:businessId" element={<UpdateBusiness />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </main>
