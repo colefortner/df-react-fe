@@ -1,11 +1,12 @@
 import { useParams } from "react-router";
+
 import Input from "../../shared/components/FormElements/Input";
 import Button from "../../shared/components/FormElements/Button";
 import {
   VALIDATOR_REQUIRE,
   VALIDATOR_MINLENGTH
 } from "../../shared/util/validators";
-
+import { useForm } from "../../shared/hooks/form-hook";
 import "./BusinessForm.css";
 
 const businesses = [
@@ -42,6 +43,25 @@ const UpdateBusiness = (props) => {
 
   const identifiedBusiness = businesses.find((b) => b.id === businessId);
 
+  const [formState, inputHandler] = useForm(
+    {
+      title: {
+        value: identifiedBusiness.title,
+        isValid: true
+      },
+      description: {
+        value: identifiedBusiness.description,
+        isValid: true
+      }
+    },
+    true
+  );
+
+  const businessUpdateSubmitHandler = (event) => {
+    event.preventDefault();
+    console.log(formState.inputs);
+  };
+
   if (!identifiedBusiness) {
     return (
       <div className="center">
@@ -50,7 +70,7 @@ const UpdateBusiness = (props) => {
     );
   }
   return (
-    <form className="place-form">
+    <form className="place-form" onSubmit={businessUpdateSubmitHandler}>
       <Input
         id="title"
         element="input"
@@ -58,21 +78,21 @@ const UpdateBusiness = (props) => {
         label="Title"
         validators={[VALIDATOR_REQUIRE()]}
         errorText="Please enter a valid title"
-        onInput={() => {}}
-        value={identifiedBusiness.title}
-        valid={true}
+        onInput={inputHandler}
+        initialValue={formState.inputs.title.value}
+        initialValidity={formState.inputs.title.isValid}
       />
       <Input
         id="description"
         element="textarea"
-        label="Title"
-        validators={[VALIDATOR_MINLENGTH()]}
+        label="Description"
+        validators={[VALIDATOR_MINLENGTH(5)]}
         errorText="Please enter a valid description"
-        onInput={() => {}}
-        value={identifiedBusiness.description}
-        valid={true}
+        onInput={inputHandler}
+        initialValue={formState.inputs.description.value}
+        initialValidity={formState.inputs.description.isValid}
       />
-      <Button type="submit" disabled={true}>
+      <Button type="submit" disabled={!formState.isValid}>
         UPDATE BUSINESS
       </Button>
     </form>
