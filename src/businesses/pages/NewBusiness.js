@@ -1,4 +1,5 @@
-import "./NewBusiness.css";
+import "./BusinessForm.css";
+
 import Input from "../../shared/components/FormElements/Input";
 import {
   VALIDATOR_MINLENGTH,
@@ -39,6 +40,10 @@ const NewBusiness = () => {
         isValid: false
       },
       description: {
+        value: "",
+        isValid: false
+      },
+      address: {
         value: "",
         isValid: false
       }

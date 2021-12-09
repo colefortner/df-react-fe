@@ -6,6 +6,8 @@ import {
   VALIDATOR_MINLENGTH
 } from "../../shared/util/validators";
 
+import "./BusinessForm.css";
+
 const businesses = [
   {
     id: "1",
@@ -48,7 +50,7 @@ const UpdateBusiness = (props) => {
     );
   }
   return (
-    <form>
+    <form className="place-form">
       <Input
         id="title"
         element="input"
