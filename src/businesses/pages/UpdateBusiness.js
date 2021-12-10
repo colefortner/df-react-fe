@@ -1,4 +1,5 @@
 import { useParams } from "react-router";
+import { useEffect, useState } from "react";
 
 import Input from "../../shared/components/FormElements/Input";
 import Button from "../../shared/components/FormElements/Button";
@@ -39,23 +40,41 @@ const businesses = [
 ];
 
 const UpdateBusiness = (props) => {
+  const [isLoading, setIsLoading] = useState(true);
   const businessId = useParams().businessId;
+
+  const [formState, inputHandler, setFormData] = useForm(
+    {
+      title: {
+        value: "",
+        isValid: false
+      },
+      description: {
+        value: "",
+        isValid: false
+      }
+    },
+    false
+  );
 
   const identifiedBusiness = businesses.find((b) => b.id === businessId);
 
-  const [formState, inputHandler] = useForm(
-    {
-      title: {
-        value: identifiedBusiness.title,
-        isValid: true
+  useEffect(() => {
+    setFormData(
+      {
+        title: {
+          value: identifiedBusiness.title,
+          isValid: true
+        },
+        description: {
+          value: identifiedBusiness.description,
+          isValid: true
+        }
       },
-      description: {
-        value: identifiedBusiness.description,
-        isValid: true
-      }
-    },
-    true
-  );
+      true
+    );
+    setIsLoading(false);
+  }, [setFormData, identifiedBusiness]);
 
   const businessUpdateSubmitHandler = (event) => {
     event.preventDefault();
@@ -69,6 +88,15 @@ const UpdateBusiness = (props) => {
       </div>
     );
   }
+
+  if (isLoading) {
+    return (
+      <div className="center">
+        <h2>Loading</h2>
+      </div>
+    );
+  }
+
   return (
     <form className="place-form" onSubmit={businessUpdateSubmitHandler}>
       <Input
