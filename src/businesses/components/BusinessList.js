@@ -2,6 +2,7 @@ import styles from "./BusinessList.module.css";
 
 import Card from "../../shared/components/UIElements/Card";
 import BusinessItem from "./BusinessItem";
+import Button from "../../shared/components/FormElements/Button";
 
 const BusinessList = (props) => {
   if (props.items.length === 0) {
@@ -9,7 +10,7 @@ const BusinessList = (props) => {
       <div class={`${styles["place-list"]} center`}>
         <Card>
           <h2>No Businesses Found</h2>
-          <button>Share Business</button>
+          <Button to="/businesses/new">Share Business</Button>
         </Card>
       </div>
     );

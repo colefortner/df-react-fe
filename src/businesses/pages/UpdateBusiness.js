@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 import Input from "../../shared/components/FormElements/Input";
 import Button from "../../shared/components/FormElements/Button";
+import Card from "../../shared/components/UIElements/Card";
 import {
   VALIDATOR_REQUIRE,
   VALIDATOR_MINLENGTH
@@ -60,19 +61,21 @@ const UpdateBusiness = (props) => {
   const identifiedBusiness = businesses.find((b) => b.id === businessId);
 
   useEffect(() => {
-    setFormData(
-      {
-        title: {
-          value: identifiedBusiness.title,
-          isValid: true
+    if (identifiedBusiness) {
+      setFormData(
+        {
+          title: {
+            value: identifiedBusiness.title,
+            isValid: true
+          },
+          description: {
+            value: identifiedBusiness.description,
+            isValid: true
+          }
         },
-        description: {
-          value: identifiedBusiness.description,
-          isValid: true
-        }
-      },
-      true
-    );
+        true
+      );
+    }
     setIsLoading(false);
   }, [setFormData, identifiedBusiness]);
 
@@ -84,7 +87,9 @@ const UpdateBusiness = (props) => {
   if (!identifiedBusiness) {
     return (
       <div className="center">
-        <h2>Could not find a place!</h2>
+        <Card>
+          <h2>Could not find a place!</h2>
+        </Card>
       </div>
     );
   }
