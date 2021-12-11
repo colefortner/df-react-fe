@@ -1,5 +1,5 @@
 import "./App.css";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Users from "./user/pages/Users";
 import NewBusiness from "./businesses/pages/NewBusiness";
 import MainNavigation from "./shared/components/Navigation/MainNavigation";
@@ -21,25 +21,36 @@ const App = () => {
     setIsLoggedIn(false);
   }, []);
 
+  let routes;
+
+  if (isLoggedIn) {
+    routes = (
+      <Routes>
+        <Route path="/" element={<Users />} />
+        <Route path="/:userId/businesses" element={<UserBusinesses />} />
+        <Route path="/businesses/new" element={<NewBusiness />} />
+        <Route path="/businesses/:businessId" element={<UpdateBusiness />} />
+        <Route path="*" element={<Users />} />
+      </Routes>
+    );
+  } else {
+    routes = (
+      <Routes>
+        <Route path="/" element={<Users />} />
+        <Route path="/:userId/businesses" element={<UserBusinesses />} />
+        <Route path="/auth" element={<Auth />} />
+        <Route path="*" element={<Auth />} />
+      </Routes>
+    );
+  }
+
   return (
     <AuthContext.Provider
       value={{ isLoggedIn: isLoggedIn, login: login, logout: logout }}
     >
       <BrowserRouter>
         <MainNavigation />
-        <main>
-          <Routes>
-            <Route path="/" element={<Users />} />
-            <Route path="/:userId/businesses" element={<UserBusinesses />} />
-            <Route path="/businesses/new" element={<NewBusiness />} />
-            <Route
-              path="/businesses/:businessId"
-              element={<UpdateBusiness />}
-            />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="*" element={<Navigate to="/" />} />
-          </Routes>
-        </main>
+        <main>{routes}</main>
       </BrowserRouter>
     </AuthContext.Provider>
   );
