@@ -95,49 +95,56 @@ const Auth = (props) => {
     }
   };
 
+  const errorHandler = () => {
+    setError(null);
+  };
+
   return (
-    <Card className="authentication">
-      {isLoading && <LoadingSpinner asOverlay />}
-      <h2>Login Required!</h2>
-      <hr />
-      <form onSubmit={authSubmitHandler}>
-        {!isLoginMode && (
+    <>
+      <ErrorModal error={error} onClear={errorHandler} />
+      <Card className="authentication">
+        {isLoading && <LoadingSpinner asOverlay />}
+        <h2>Login Required!</h2>
+        <hr />
+        <form onSubmit={authSubmitHandler}>
+          {!isLoginMode && (
+            <Input
+              element="input"
+              id="name"
+              type="text"
+              label="Name"
+              validators={[VALIDATOR_REQUIRE()]}
+              errorText="please enter a name"
+              onInput={inputHandler}
+            />
+          )}
           <Input
             element="input"
-            id="name"
-            type="text"
-            label="Name"
-            validators={[VALIDATOR_REQUIRE()]}
-            errorText="please enter a name"
+            id="email"
+            type="email"
+            label="Email"
+            validators={[VALIDATOR_EMAIL()]}
+            errorText="Please enter a valid email address"
             onInput={inputHandler}
           />
-        )}
-        <Input
-          element="input"
-          id="email"
-          type="email"
-          label="Email"
-          validators={[VALIDATOR_EMAIL()]}
-          errorText="Please enter a valid email address"
-          onInput={inputHandler}
-        />
-        <Input
-          element="input"
-          id="password"
-          type="password"
-          label="Password"
-          validators={[VALIDATOR_MINLENGTH(5)]}
-          errorText="Please enter a valid password"
-          onInput={inputHandler}
-        />
-        <Button type="submit" disabled={!formState.isValid}>
-          {isLoginMode ? "Login" : "Signup"}
+          <Input
+            element="input"
+            id="password"
+            type="password"
+            label="Password"
+            validators={[VALIDATOR_MINLENGTH(5)]}
+            errorText="Please enter a valid password"
+            onInput={inputHandler}
+          />
+          <Button type="submit" disabled={!formState.isValid}>
+            {isLoginMode ? "Login" : "Signup"}
+          </Button>
+        </form>
+        <Button inverse onClick={switchModeHandler}>
+          Switch {isLoginMode ? "Signup" : "Login"}
         </Button>
-      </form>
-      <Button inverse onClick={switchModeHandler}>
-        Switch {isLoginMode ? "Signup" : "Login"}
-      </Button>
-    </Card>
+      </Card>
+    </>
   );
 };
 export default Auth;
