@@ -1,5 +1,5 @@
-import { useParams } from "react-router";
-import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router";
+import { useEffect, useState, useContext } from "react";
 
 import Input from "../../shared/components/FormElements/Input";
 import Button from "../../shared/components/FormElements/Button";
@@ -9,44 +9,22 @@ import {
   VALIDATOR_MINLENGTH
 } from "../../shared/util/validators";
 import { useForm } from "../../shared/hooks/form-hook";
+import { useHttpClient } from "../../shared/hooks/http-hook";
+import { AuthContext } from "../../shared/context/auth-context";
 import "./BusinessForm.css";
-
-const businesses = [
-  {
-    id: "1",
-    title: "Pinellas Ale Works",
-    description: "Dog bar",
-    imageUrl:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKcUEp6zPgzVvrOThJ_gqLmYExy-2mwij_7Q&usqp=CAU",
-    address: "1962 1st Ave S, St. Petersburg, FL 33712",
-    location: {
-      lat: 27.7699,
-      lng: -82.660099
-    },
-    creator: "2"
-  },
-  {
-    id: "2",
-    title: "Pinellas Ale Works",
-    description: "Dog bar",
-    imageUrl:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKcUEp6zPgzVvrOThJ_gqLmYExy-2mwij_7Q&usqp=CAU",
-    address: "1962 1st Ave S, St. Petersburg, FL 33712",
-    location: {
-      lat: 27.7699,
-      lng: -82.660099
-    },
-    creator: "1"
-  }
-];
+import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
+import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 
 const UpdateBusiness = (props) => {
-  const [isLoading, setIsLoading] = useState(true);
+  const auth = useContext(AuthContext);
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+  const [loadedBusiness, setLoadedBusiness] = useState();
   const businessId = useParams().businessId;
+  const navigate = useNavigate();
 
   const [formState, inputHandler, setFormData] = useForm(
     {
-      title: {
+      name: {
         value: "",
         isValid: false
       },
@@ -58,33 +36,58 @@ const UpdateBusiness = (props) => {
     false
   );
 
-  const identifiedBusiness = businesses.find((b) => b.id === businessId);
-
   useEffect(() => {
-    if (identifiedBusiness) {
-      setFormData(
-        {
-          title: {
-            value: identifiedBusiness.title,
-            isValid: true
+    const fetchBusiness = async () => {
+      try {
+        const responseData = await sendRequest(
+          `http://localhost:5050/api/businesses/${businessId}`
+        );
+        setLoadedBusiness(responseData.business);
+        setFormData(
+          {
+            name: {
+              value: responseData.business.name,
+              isValid: true
+            },
+            description: {
+              value: responseData.business.description,
+              isValid: true
+            }
           },
-          description: {
-            value: identifiedBusiness.description,
-            isValid: true
-          }
-        },
-        true
-      );
-    }
-    setIsLoading(false);
-  }, [setFormData, identifiedBusiness]);
+          true
+        );
+      } catch (err) {}
+    };
+    fetchBusiness();
+  }, [sendRequest, businessId, setFormData]);
 
-  const businessUpdateSubmitHandler = (event) => {
+  const businessUpdateSubmitHandler = async (event) => {
     event.preventDefault();
-    console.log(formState.inputs);
+    try {
+      await sendRequest(
+        `http://localhost:5050/api/businesses/${businessId}`,
+        "PATCH",
+        JSON.stringify({
+          name: formState.inputs.name.value,
+          description: formState.inputs.description.value
+        }),
+        {
+          "Content-Type": "application/json"
+        }
+      );
+      navigate("/" + auth.userId + "/businesses");
+    } catch (err) {}
   };
 
-  if (!identifiedBusiness) {
+  if (isLoading) {
+    return (
+      <div className="center">
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
+  if (!loadedBusiness && !error) {
     return (
       <div className="center">
         <Card>
@@ -94,41 +97,38 @@ const UpdateBusiness = (props) => {
     );
   }
 
-  if (isLoading) {
-    return (
-      <div className="center">
-        <h2>Loading</h2>
-      </div>
-    );
-  }
-
   return (
-    <form className="place-form" onSubmit={businessUpdateSubmitHandler}>
-      <Input
-        id="title"
-        element="input"
-        type="text"
-        label="Title"
-        validators={[VALIDATOR_REQUIRE()]}
-        errorText="Please enter a valid title"
-        onInput={inputHandler}
-        initialValue={formState.inputs.title.value}
-        initialValidity={formState.inputs.title.isValid}
-      />
-      <Input
-        id="description"
-        element="textarea"
-        label="Description"
-        validators={[VALIDATOR_MINLENGTH(5)]}
-        errorText="Please enter a valid description"
-        onInput={inputHandler}
-        initialValue={formState.inputs.description.value}
-        initialValidity={formState.inputs.description.isValid}
-      />
-      <Button type="submit" disabled={!formState.isValid}>
-        UPDATE BUSINESS
-      </Button>
-    </form>
+    <>
+      <ErrorModal error={error} onClear={clearError} />
+      {!isLoading && loadedBusiness && (
+        <form className="place-form" onSubmit={businessUpdateSubmitHandler}>
+          <Input
+            id="name"
+            element="input"
+            type="text"
+            label="Title"
+            validators={[VALIDATOR_REQUIRE()]}
+            errorText="Please enter a valid title"
+            onInput={inputHandler}
+            initialValue={loadedBusiness.name}
+            initialValidity={true}
+          />
+          <Input
+            id="description"
+            element="textarea"
+            label="Description"
+            validators={[VALIDATOR_MINLENGTH(5)]}
+            errorText="Please enter a valid description"
+            onInput={inputHandler}
+            initialValue={loadedBusiness.description}
+            initialValidity={true}
+          />
+          <Button type="submit" disabled={!formState.isValid}>
+            UPDATE BUSINESS
+          </Button>
+        </form>
+      )}
+    </>
   );
 };
 
