@@ -28,6 +28,7 @@ const BusinessList = (props) => {
           address={business.address}
           creatorId={business.creator}
           coordinates={business.location}
+          onDelete={props.onDeleteBusiness}
         />
       ))}
     </ul>

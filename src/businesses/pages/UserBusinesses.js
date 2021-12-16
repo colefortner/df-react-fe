@@ -52,6 +52,12 @@ const UserBusinesses = () => {
     fetchBusinesses();
   }, [sendRequest, userId]);
 
+  const businessDeleteHandler = (deletedBusinessId) => {
+    setLoadedBusinesses((prevBusinesses) =>
+      prevBusinesses.filter((business) => business.id !== deletedBusinessId)
+    );
+  };
+
   return (
     <>
       <ErrorModal error={error} onClear={clearError} />
@@ -61,7 +67,10 @@ const UserBusinesses = () => {
         </div>
       )}
       {!isLoading && loadedBusinesses && (
-        <BusinessList items={loadedBusinesses} />
+        <BusinessList
+          items={loadedBusinesses}
+          onDeleteBusiness={businessDeleteHandler}
+        />
       )}
     </>
   );

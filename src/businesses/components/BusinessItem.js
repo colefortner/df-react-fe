@@ -8,9 +8,13 @@ import Card from "../../shared/components/UIElements/Card";
 import Button from "../../shared/components/FormElements/Button";
 import Modal from "../../shared/components/UIElements/Modal";
 import Map from "../../shared/components/UIElements/Map";
+import ErrorModal from "../../shared/components/UIElements/ErrorModal";
+import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
+import { useHttpClient } from "../../shared/hooks/http-hook";
 
 const BusinessItem = (props) => {
   const auth = useContext(AuthContext);
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [showMap, setShowMap] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
 
@@ -26,13 +30,15 @@ const BusinessItem = (props) => {
     setShowConfirmModal(false);
   };
 
-  const confirmDeleteHandler = () => {
+  const confirmDeleteHandler = async () => {
     setShowConfirmModal(false);
-    console.log("deleting");
+    sendRequest(`http://localhost:5050/api/businesses/${props.id}`, "DELETE");
+    props.onDelete(props.id);
   };
 
   return (
     <>
+      <ErrorModal error={error} onClear={clearError} />
       <Modal
         show={showMap}
         onCancel={closeMapHandler}
@@ -65,6 +71,7 @@ const BusinessItem = (props) => {
       </Modal>
       <li class={styles["place-item"]}>
         <Card class={styles["place-item__content"]}>
+          {isLoading && <LoadingSpinner asOverlay />}
           <div class={styles["place-item__image"]}>
             <img src={props.image} alt={props.title} />
           </div>
