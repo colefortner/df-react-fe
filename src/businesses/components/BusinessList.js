@@ -22,7 +22,7 @@ const BusinessList = (props) => {
         <BusinessItem
           key={business.id}
           id={business.id}
-          image={business.imageUrl}
+          image={business.image}
           title={business.title}
           description={business.description}
           address={business.address}
