@@ -10,7 +10,10 @@ const UserItem = (props) => {
       <Card class={styles["user-item__content"]}>
         <Link to={`/${props.id}/businesses`}>
           <div class={styles["user-item__image"]}>
-            <Avatar image={props.image} alt={props.name} />
+            <Avatar
+              image={`http://localhost:5050/${props.image}`}
+              alt={props.name}
+            />
           </div>
           <div class={styles["user-item__info"]}>
             <h2>{props.name}</h2>
