@@ -56,7 +56,8 @@ const NewBusiness = () => {
       await sendRequest(
         "http://localhost:5050/api/businesses",
         "POST",
-        formData
+        formData,
+        { Authorization: "Bearer " + auth.token }
       );
       history("/");
     } catch (err) {}
