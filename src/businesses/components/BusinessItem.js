@@ -32,7 +32,12 @@ const BusinessItem = (props) => {
 
   const confirmDeleteHandler = async () => {
     setShowConfirmModal(false);
-    sendRequest(`http://localhost:5050/api/businesses/${props.id}`, "DELETE");
+    sendRequest(
+      `http://localhost:5050/api/businesses/${props.id}`,
+      "DELETE",
+      null,
+      { Authorization: "Bearer " + auth.token }
+    );
     props.onDelete(props.id);
   };
 
