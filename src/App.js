@@ -8,7 +8,7 @@ import { BrowserRouter } from "react-router-dom";
 import UpdateBusiness from "./businesses/pages/UpdateBusiness";
 import Auth from "./user/pages/Auth";
 import { AuthContext } from "./shared/context/auth-context";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 
 const App = () => {
   const [token, setToken] = useState(false);
@@ -26,7 +26,15 @@ const App = () => {
   const logout = useCallback(() => {
     setToken(null);
     setUserId(null);
+    localStorage.removeItem("userData");
   }, []);
+
+  useEffect(() => {
+    const storedData = JSON.parse(localStorage.getItem("userData"));
+    if (storedData && storedData.token) {
+      login(storedData.userId, storedData.token);
+    }
+  }, [login]);
 
   let routes;
 
