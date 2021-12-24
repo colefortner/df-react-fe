@@ -40,7 +40,7 @@ const UpdateBusiness = (props) => {
     const fetchBusiness = async () => {
       try {
         const responseData = await sendRequest(
-          `http://localhost:5050/api/businesses/${businessId}`
+          `${process.env.REACT_APP_BACKEND_URL}/businesses/${businessId}`
         );
         setLoadedBusiness(responseData.business);
         setFormData(
@@ -65,7 +65,7 @@ const UpdateBusiness = (props) => {
     event.preventDefault();
     try {
       await sendRequest(
-        `http://localhost:5050/api/businesses/${businessId}`,
+        `${process.env.REACT_APP_BACKEND_URL}/businesses/${businessId}`,
         "PATCH",
         JSON.stringify({
           name: formState.inputs.name.value,

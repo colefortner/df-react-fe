@@ -54,7 +54,7 @@ const NewBusiness = () => {
       formData.append("image", formState.inputs.image.value);
 
       await sendRequest(
-        "http://localhost:5050/api/businesses",
+        process.env.REACT_APP_BACKEND_URL + "/businesses",
         "POST",
         formData,
         { Authorization: "Bearer " + auth.token }

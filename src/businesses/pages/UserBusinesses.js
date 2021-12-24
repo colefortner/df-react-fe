@@ -44,7 +44,7 @@ const UserBusinesses = () => {
     const fetchBusinesses = async () => {
       try {
         const responseData = await sendRequest(
-          `http://localhost:5050/api/businesses/user/${userId}`
+          `${process.env.REACT_APP_BACKEND_URL}/businesses/user/${userId}`
         );
         setLoadedBusinesses(responseData.businesses);
       } catch (err) {}

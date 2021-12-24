@@ -33,7 +33,7 @@ const BusinessItem = (props) => {
   const confirmDeleteHandler = async () => {
     setShowConfirmModal(false);
     sendRequest(
-      `http://localhost:5050/api/businesses/${props.id}`,
+      `${process.env.REACT_APP_BACKEND_URL}/businesses/${props.id}`,
       "DELETE",
       null,
       { Authorization: "Bearer " + auth.token }
@@ -79,7 +79,7 @@ const BusinessItem = (props) => {
           {isLoading && <LoadingSpinner asOverlay />}
           <div class={styles["place-item__image"]}>
             <img
-              src={`http://localhost:5050/${props.image}`}
+              src={`${process.env.REACT_APP_ASSET_URL}/${props.image}`}
               alt={props.title}
             />
           </div>
