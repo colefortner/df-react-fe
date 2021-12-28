@@ -40,7 +40,7 @@ const UpdateBusiness = (props) => {
     const fetchBusiness = async () => {
       try {
         const responseData = await sendRequest(
-          `${process.env.REACT_APP_BACKEND_URL}/businesses/${businessId}`
+          `http://localhost:5050/api/businesses/${businessId}`
         );
         setLoadedBusiness(responseData.business);
         setFormData(

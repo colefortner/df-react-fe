@@ -12,7 +12,7 @@ const Users = () => {
     const fetchUsers = async () => {
       try {
         const responseData = await sendRequest(
-          process.env.REACT_APP_BACKEND_URL + "/users"
+          `http://localhost:5050/api/users`
         );
 
         setLoadedUsers(responseData.users);
